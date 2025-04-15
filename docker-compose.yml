@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  predictive-maintenance:
+    build: .
+    container_name: predictive-maintenance
+    restart: unless-stopped
+    volumes:
+      # Mount the data directory to persist CSV files
+      - ./app/data:/app/data
+      # Mount the device for Arduino communication (adjust the path as needed)
+      - /dev:/dev
+    devices:
+      # Pass through Arduino device (adjust path as needed)
+      - /dev/ttyACM0:/dev/ttyACM0
+    environment:
+      - TZ=UTC
+      - ARDUINO_PORT=/dev/ttyACM0
+      - USE_MOCK_DATA=false
+    # Grant device access permissions
+    privileged: true
